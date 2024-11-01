@@ -36,4 +36,9 @@
         reviewerId,reviewTime,createTime,
         updateTime,isDelete
     </sql>
+    <select id="listQuestionWithDelete" resultType="com.zbn.Interview.model.entity.Question">
+        select *
+        from question
+        where updateTime >= #{minUpdateTime}
+    </select>
 </mapper>

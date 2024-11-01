@@ -1,4 +1,4 @@
-package com.zbn.Interview.model.questionthumb;
+package com.zbn.Interview.model.dto.questionthumb;
 
 import lombok.Data;
 

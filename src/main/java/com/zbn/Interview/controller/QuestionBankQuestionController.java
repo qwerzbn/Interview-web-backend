@@ -1,14 +1,21 @@
 package com.zbn.Interview.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zbn.Interview.annotation.AuthCheck;
 import com.zbn.Interview.common.BaseResponse;
 import com.zbn.Interview.common.DeleteRequest;
 import com.zbn.Interview.common.ErrorCode;
 import com.zbn.Interview.common.ResultUtils;
+import com.zbn.Interview.constant.UserConstant;
 import com.zbn.Interview.exception.BusinessException;
 import com.zbn.Interview.exception.ThrowUtils;
+import com.zbn.Interview.model.dto.questionBank.QuestionBankQueryRequest;
 import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionAddRequest;
+import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionQueryRequest;
 import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionRemoveRequest;
 import com.zbn.Interview.model.entity.Question;
 import com.zbn.Interview.model.entity.QuestionBank;
@@ -24,6 +31,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Wrapper;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/questionBank_question")
@@ -104,6 +115,30 @@ public class QuestionBankQuestionController {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
         return ResultUtils.success(true);
+    }
 
+    /**
+     * 获取所属题库列表
+     *
+     * @param questionBankQuestionQueryRequest
+     * @return
+     */
+    @PostMapping("/list/questionBank")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<List<QuestionBank>> listQuestionBankByQuestion(@RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest) {
+        ThrowUtils.throwIf(questionBankQuestionQueryRequest == null, ErrorCode.PARAMS_ERROR);
+        Long questionId = questionBankQuestionQueryRequest.getQuestionId();
+        QueryWrapper<QuestionBank> queryWrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<QuestionBankQuestion> questionBankQuestionLambdaQueryWrapper = Wrappers.lambdaQuery(QuestionBankQuestion.class);
+        questionBankQuestionLambdaQueryWrapper.eq(QuestionBankQuestion::getQuestionId, questionId)
+                .select(QuestionBankQuestion::getQuestionBankId);
+        List<QuestionBankQuestion> questionBankQuestions = questionBankQuestionService.list(questionBankQuestionLambdaQueryWrapper);
+        if (CollectionUtils.isNotEmpty(questionBankQuestions)) {
+            Set<Long> questionBankIdSet = questionBankQuestions.stream().map(QuestionBankQuestion::getQuestionBankId).collect(Collectors.toSet());
+            queryWrapper.in("id", questionBankIdSet);
+            return ResultUtils.success(questionBankService.list(queryWrapper));
+        } else {
+            return ResultUtils.success(Collections.emptyList());
+        }
     }
 }

@@ -5,7 +5,7 @@ import com.zbn.Interview.common.ErrorCode;
 import com.zbn.Interview.common.ResultUtils;
 import com.zbn.Interview.exception.BusinessException;
 import com.zbn.Interview.model.entity.User;
-import com.zbn.Interview.model.questionthumb.QuestionViewAddRequest;
+import com.zbn.Interview.model.dto.questionthumb.QuestionViewAddRequest;
 import com.zbn.Interview.service.QuestionViewService;
 import com.zbn.Interview.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
