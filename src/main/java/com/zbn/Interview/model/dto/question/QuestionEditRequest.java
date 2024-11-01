@@ -2,6 +2,7 @@ package com.zbn.Interview.model.dto.question;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -57,5 +58,6 @@ public class QuestionEditRequest implements Serializable {
      */
     private Date editTime;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

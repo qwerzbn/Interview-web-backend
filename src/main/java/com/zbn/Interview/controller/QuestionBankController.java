@@ -23,7 +23,10 @@ import com.zbn.Interview.service.QuestionService;
 import com.zbn.Interview.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author zbn
  * @date 2024/10/24
+ * @Link <a href="https://github.com/qwerzbn"></a>
  */
 @RestController
 @RequestMapping("/questionBank")
@@ -52,9 +56,9 @@ public class QuestionBankController {
     /**
      * 创建题库
      *
-     * @param questionBankAddRequest
-     * @param request
-     * @return
+     * @param questionBankAddRequest 添加请求
+     * @param request                http请求
+     * @return id
      */
     @PostMapping("/add")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -79,9 +83,9 @@ public class QuestionBankController {
     /**
      * 删除题库
      *
-     * @param deleteRequest
-     * @param request
-     * @return
+     * @param deleteRequest 删除请求
+     * @param request       http请求
+     * @return 是否成功
      */
     @PostMapping("/delete")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -107,8 +111,8 @@ public class QuestionBankController {
     /**
      * 更新题库（仅管理员可用）
      *
-     * @param questionBankUpdateRequest
-     * @return
+     * @param questionBankUpdateRequest 更新请求
+     * @return 是否成功
      */
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -134,11 +138,11 @@ public class QuestionBankController {
     /**
      * 根据 id 获取题库（封装类）
      *
-     * @param questionBankQueryRequest
-     * @return
+     * @param questionBankQueryRequest 查询请求
+     * @return 题库视图
      */
     @PostMapping("/get/vo")
-    public BaseResponse<QuestionBankVO> getQuestionBankVOById(@RequestBody  QuestionBankQueryRequest questionBankQueryRequest, HttpServletRequest request) {
+    public BaseResponse<QuestionBankVO> getQuestionBankVOById(@RequestBody QuestionBankQueryRequest questionBankQueryRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionBankQueryRequest == null || questionBankQueryRequest.getId() <= 0, ErrorCode.PARAMS_ERROR);
         long id = questionBankQueryRequest.getId();
         // 查询数据库
@@ -160,8 +164,8 @@ public class QuestionBankController {
     /**
      * 分页获取题库列表（仅管理员可用）
      *
-     * @param questionBankQueryRequest
-     * @return
+     * @param questionBankQueryRequest 查询请求
+     * @return 题库列表
      */
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -177,9 +181,9 @@ public class QuestionBankController {
     /**
      * 分页获取题库列表（封装类）
      *
-     * @param questionBankQueryRequest
-     * @param request
-     * @return
+     * @param questionBankQueryRequest 查询请求
+     * @param request                  http请求
+     * @return 题库视图列表
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<QuestionBankVO>> listQuestionBankVOByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
@@ -198,9 +202,9 @@ public class QuestionBankController {
     /**
      * 分页获取当前登录用户创建的题库列表
      *
-     * @param questionBankQueryRequest
-     * @param request
-     * @return
+     * @param questionBankQueryRequest 查询请求
+     * @param request                  http请求
+     * @return 题库视图列表
      */
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionBankVO>> listMyQuestionBankVOByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
@@ -223,9 +227,9 @@ public class QuestionBankController {
     /**
      * 编辑题库
      *
-     * @param questionBankEditRequest
-     * @param request
-     * @return
+     * @param questionBankEditRequest 编辑请求
+     * @param request                 http请求
+     * @return 是否成功
      */
     @PostMapping("/edit")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)

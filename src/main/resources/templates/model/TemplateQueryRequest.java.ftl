@@ -52,5 +52,6 @@ public class ${upperDataKey}QueryRequest extends PageRequest implements Serializ
      */
     private Long userId;
 
+       @Serial
     private static final long serialVersionUID = 1L;
 }

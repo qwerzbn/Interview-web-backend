@@ -72,5 +72,6 @@ public class Post implements Serializable {
     private Integer isDelete;
 
     @TableField(exist = false)
+       @Serial
     private static final long serialVersionUID = 1L;
 }

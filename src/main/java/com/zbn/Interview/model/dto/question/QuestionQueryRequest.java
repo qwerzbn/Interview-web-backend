@@ -4,6 +4,7 @@ import com.zbn.Interview.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -80,5 +81,6 @@ public class QuestionQueryRequest extends PageRequest implements Serializable {
     private Long reviewerId;
 
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

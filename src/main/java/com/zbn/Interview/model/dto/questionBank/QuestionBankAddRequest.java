@@ -32,5 +32,6 @@ public class QuestionBankAddRequest implements Serializable {
      */
     private Integer priority;
 
+       @Serial
     private static final long serialVersionUID = 1L;
 }

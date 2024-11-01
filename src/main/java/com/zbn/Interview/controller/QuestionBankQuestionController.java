@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zbn.Interview.annotation.AuthCheck;
 import com.zbn.Interview.common.BaseResponse;
 import com.zbn.Interview.common.DeleteRequest;
@@ -13,8 +12,8 @@ import com.zbn.Interview.common.ResultUtils;
 import com.zbn.Interview.constant.UserConstant;
 import com.zbn.Interview.exception.BusinessException;
 import com.zbn.Interview.exception.ThrowUtils;
-import com.zbn.Interview.model.dto.questionBank.QuestionBankQueryRequest;
 import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionAddRequest;
+import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionBatchAddRequest;
 import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionQueryRequest;
 import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionRemoveRequest;
 import com.zbn.Interview.model.entity.Question;
@@ -30,11 +29,18 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Wrapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+/**
+ * 题库题目(QuestionBankQuestion)表控制层
+ *
+ * @author zbn
+ * @date 2024/10/24
+ * @Link <a href="https://github.com/qwerzbn"></a>
+ */
 
 @RestController
 @RequestMapping("/questionBank_question")
@@ -47,8 +53,15 @@ public class QuestionBankQuestionController {
     @Resource
     private QuestionService questionService;
     @Resource
-    QuestionBankService questionBankService;
+    private QuestionBankService questionBankService;
 
+    /**
+     * 添加题目到题库
+     *
+     * @param questionBankQuestionAddRequest 添加请求
+     * @param request                        http请求
+     * @return id
+     */
     @PostMapping("/add")
     public BaseResponse<Long> addQuestionBankQuestion(@RequestBody QuestionBankQuestionAddRequest questionBankQuestionAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionBankQuestionAddRequest == null, ErrorCode.PARAMS_ERROR);
@@ -76,7 +89,15 @@ public class QuestionBankQuestionController {
         return ResultUtils.success(id);
     }
 
+    /**
+     * 删除题目题库信息
+     *
+     * @param deleteRequest 删除请求
+     * @param request       http请求
+     * @return 是否成功
+     */
     @DeleteMapping("/delete")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteQuestionBankQuestion(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         // 判断请求是否合法
         ThrowUtils.throwIf(deleteRequest == null, ErrorCode.PARAMS_ERROR);
@@ -101,15 +122,20 @@ public class QuestionBankQuestionController {
         return ResultUtils.success(true);
     }
 
+    /**
+     * 从题库中移除题目
+     *
+     * @param questionBankQuestionRemoveRequest 移除请求
+     * @return 是否成功
+     */
     @DeleteMapping("/remove")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> removeQuestionBankQuestion(@RequestBody QuestionBankQuestionRemoveRequest questionBankQuestionRemoveRequest) {
         ThrowUtils.throwIf(questionBankQuestionRemoveRequest == null, ErrorCode.PARAMS_ERROR);
         Long questionBankId = questionBankQuestionRemoveRequest.getQuestionBankId();
         Long questionId = questionBankQuestionRemoveRequest.getQuestionId();
         LambdaQueryWrapper<QuestionBankQuestion> questionBankQuestionLambdaQueryWrapper = Wrappers.lambdaQuery(QuestionBankQuestion.class);
-        questionBankQuestionLambdaQueryWrapper
-                .eq(QuestionBankQuestion::getQuestionBankId, questionBankId)
-                .eq(QuestionBankQuestion::getQuestionId, questionId);
+        questionBankQuestionLambdaQueryWrapper.eq(QuestionBankQuestion::getQuestionBankId, questionBankId).eq(QuestionBankQuestion::getQuestionId, questionId);
         boolean remove = questionBankQuestionService.remove(questionBankQuestionLambdaQueryWrapper);
         if (!remove) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
@@ -120,8 +146,8 @@ public class QuestionBankQuestionController {
     /**
      * 获取所属题库列表
      *
-     * @param questionBankQuestionQueryRequest
-     * @return
+     * @param questionBankQuestionQueryRequest 查询请求
+     * @return 所属题库列表
      */
     @PostMapping("/list/questionBank")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
@@ -130,8 +156,7 @@ public class QuestionBankQuestionController {
         Long questionId = questionBankQuestionQueryRequest.getQuestionId();
         QueryWrapper<QuestionBank> queryWrapper = new QueryWrapper<>();
         LambdaQueryWrapper<QuestionBankQuestion> questionBankQuestionLambdaQueryWrapper = Wrappers.lambdaQuery(QuestionBankQuestion.class);
-        questionBankQuestionLambdaQueryWrapper.eq(QuestionBankQuestion::getQuestionId, questionId)
-                .select(QuestionBankQuestion::getQuestionBankId);
+        questionBankQuestionLambdaQueryWrapper.eq(QuestionBankQuestion::getQuestionId, questionId).select(QuestionBankQuestion::getQuestionBankId);
         List<QuestionBankQuestion> questionBankQuestions = questionBankQuestionService.list(questionBankQuestionLambdaQueryWrapper);
         if (CollectionUtils.isNotEmpty(questionBankQuestions)) {
             Set<Long> questionBankIdSet = questionBankQuestions.stream().map(QuestionBankQuestion::getQuestionBankId).collect(Collectors.toSet());
@@ -141,4 +166,41 @@ public class QuestionBankQuestionController {
             return ResultUtils.success(Collections.emptyList());
         }
     }
+
+    /**
+     * 批量添加题目
+     *
+     * @param questionBankQuestionBatchAddRequest 批量添加请求
+     * @param request                             http请求
+     * @return 是否成功
+     */
+    @PostMapping("/add/batch")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> addBatchQuestionBankQuestion(@RequestBody QuestionBankQuestionBatchAddRequest questionBankQuestionBatchAddRequest, HttpServletRequest request) {
+        ThrowUtils.throwIf(questionBankQuestionBatchAddRequest == null, ErrorCode.PARAMS_ERROR, "请求参数不能为空");
+        Long questionBankId = questionBankQuestionBatchAddRequest.getQuestionBankId();
+        List<Long> questionIdList = questionBankQuestionBatchAddRequest.getQuestionId();
+        User loginUser = userService.getLoginUser(request);
+        questionBankQuestionService.addBatchQuestion(questionIdList, questionBankId, loginUser.getId());
+        return ResultUtils.success(true);
+    }
+
+    /**
+     * 批量移除题目
+     *
+     * @param questionBankQuestionBatchAddRequest 批量添加请求
+     * @param request                             http请求
+     * @return 是否成功
+     */
+    @DeleteMapping("/remove/batch")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> removeBatchQuestionBankQuestion(@RequestBody QuestionBankQuestionBatchAddRequest questionBankQuestionBatchAddRequest, HttpServletRequest request) {
+        ThrowUtils.throwIf(questionBankQuestionBatchAddRequest == null, ErrorCode.PARAMS_ERROR, "请求参数不能为空");
+        Long questionBankId = questionBankQuestionBatchAddRequest.getQuestionBankId();
+        List<Long> questionIdList = questionBankQuestionBatchAddRequest.getQuestionId();
+        User loginUser = userService.getLoginUser(request);
+        questionBankQuestionService.removeBatchQuestion(questionIdList, questionBankId, loginUser.getId());
+        return ResultUtils.success(true);
+    }
+
 }

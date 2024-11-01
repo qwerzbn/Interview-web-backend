@@ -44,5 +44,6 @@ public class QuestionBankEditRequest implements Serializable {
     private Date editTime;
 
 
+       @Serial
     private static final long serialVersionUID = 1L;
 }

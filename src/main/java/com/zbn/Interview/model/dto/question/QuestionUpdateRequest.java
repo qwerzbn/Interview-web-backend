@@ -2,6 +2,7 @@ package com.zbn.Interview.model.dto.question;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -83,5 +84,6 @@ public class QuestionUpdateRequest implements Serializable {
      */
     private Long reviewerId;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

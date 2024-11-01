@@ -29,5 +29,6 @@ public class ${upperDataKey}AddRequest implements Serializable {
      */
     private List<String> tags;
 
+       @Serial
     private static final long serialVersionUID = 1L;
 }

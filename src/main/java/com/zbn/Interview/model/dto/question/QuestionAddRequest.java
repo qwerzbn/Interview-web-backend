@@ -45,5 +45,6 @@ public class QuestionAddRequest implements Serializable {
      * 优先级
      */
     private Integer priority;
+       @Serial
     private static final long serialVersionUID = 1L;
 }

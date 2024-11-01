@@ -15,10 +15,7 @@ import com.zbn.Interview.common.ResultUtils;
 import com.zbn.Interview.constant.UserConstant;
 import com.zbn.Interview.exception.BusinessException;
 import com.zbn.Interview.exception.ThrowUtils;
-import com.zbn.Interview.model.dto.question.QuestionAddRequest;
-import com.zbn.Interview.model.dto.question.QuestionEditRequest;
-import com.zbn.Interview.model.dto.question.QuestionQueryRequest;
-import com.zbn.Interview.model.dto.question.QuestionUpdateRequest;
+import com.zbn.Interview.model.dto.question.*;
 import com.zbn.Interview.model.entity.Question;
 import com.zbn.Interview.model.entity.QuestionBankQuestion;
 import com.zbn.Interview.model.entity.User;
@@ -28,6 +25,7 @@ import com.zbn.Interview.service.QuestionService;
 import com.zbn.Interview.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -261,6 +259,13 @@ public class QuestionController {
         return ResultUtils.success(true);
     }
 
+    /**
+     * ES 查询
+     *
+     * @param questionQueryRequest
+     * @param request
+     * @return
+     */
     @PostMapping("/search/page/vo")
     public BaseResponse<Page<QuestionVO>> searchQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                                  HttpServletRequest request) {
@@ -271,5 +276,24 @@ public class QuestionController {
         return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
     }
 
+    /**
+     * 批量删除题目
+     *
+     * @param questionBatchDeleteRequest 批量删除请求
+     * @return 删除结果
+     */
+    @DeleteMapping("/batch/delete")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @Transactional(rollbackFor = Exception.class)
+    public BaseResponse<Boolean> batchDeleteQuestion(@RequestBody QuestionBatchDeleteRequest questionBatchDeleteRequest) {
+        ThrowUtils.throwIf(questionBatchDeleteRequest == null, ErrorCode.PARAMS_ERROR);
+        List<Long> questionIdList = questionBatchDeleteRequest.getQuestionId();
+        ThrowUtils.throwIf(CollectionUtils.isEmpty(questionIdList), ErrorCode.PARAMS_ERROR);
+        for (Long questionId : questionIdList) {
+            boolean result = questionService.removeById(questionId);
+            ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        }
+        return ResultUtils.success(true);
+    }
     // endregion
 }

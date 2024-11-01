@@ -67,5 +67,6 @@ public class QuestionBankUpdateRequest implements Serializable {
      * 审核时间
      */
     private Date reviewTime;
+       @Serial
     private static final long serialVersionUID = 1L;
 }

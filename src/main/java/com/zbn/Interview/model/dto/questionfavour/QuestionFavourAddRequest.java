@@ -18,5 +18,6 @@ public class QuestionFavourAddRequest implements Serializable {
      */
     private Long questionId;
 
+       @Serial
     private static final long serialVersionUID = 1L;
 }

@@ -48,5 +48,6 @@ public class LoginUserVO implements Serializable {
      */
     private Date updateTime;
 
+       @Serial
     private static final long serialVersionUID = 1L;
 }

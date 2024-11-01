@@ -51,5 +51,6 @@ public class QuestionBankQuestion implements Serializable {
      */
     private Integer questionOrder;
     @TableField(exist = false)
+       @Serial
     private static final long serialVersionUID = 1L;
 }

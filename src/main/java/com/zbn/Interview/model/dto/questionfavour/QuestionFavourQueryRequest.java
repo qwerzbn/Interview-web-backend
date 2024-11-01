@@ -27,5 +27,6 @@ public class QuestionFavourQueryRequest extends PageRequest implements Serializa
      */
     private Long userId;
 
+       @Serial
     private static final long serialVersionUID = 1L;
 }
