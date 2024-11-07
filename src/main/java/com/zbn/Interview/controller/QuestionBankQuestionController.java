@@ -12,10 +12,7 @@ import com.zbn.Interview.common.ResultUtils;
 import com.zbn.Interview.constant.UserConstant;
 import com.zbn.Interview.exception.BusinessException;
 import com.zbn.Interview.exception.ThrowUtils;
-import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionAddRequest;
-import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionBatchAddRequest;
-import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionQueryRequest;
-import com.zbn.Interview.model.dto.questionbankquestion.QuestionBankQuestionRemoveRequest;
+import com.zbn.Interview.model.dto.questionbankquestion.*;
 import com.zbn.Interview.model.entity.Question;
 import com.zbn.Interview.model.entity.QuestionBank;
 import com.zbn.Interview.model.entity.QuestionBankQuestion;
@@ -188,16 +185,16 @@ public class QuestionBankQuestionController {
     /**
      * 批量移除题目
      *
-     * @param questionBankQuestionBatchAddRequest 批量添加请求
+     * @param questionBankQuestionBatchRemoveRequest 批量添加请求
      * @param request                             http请求
      * @return 是否成功
      */
     @DeleteMapping("/remove/batch")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> removeBatchQuestionBankQuestion(@RequestBody QuestionBankQuestionBatchAddRequest questionBankQuestionBatchAddRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(questionBankQuestionBatchAddRequest == null, ErrorCode.PARAMS_ERROR, "请求参数不能为空");
-        Long questionBankId = questionBankQuestionBatchAddRequest.getQuestionBankId();
-        List<Long> questionIdList = questionBankQuestionBatchAddRequest.getQuestionId();
+    public BaseResponse<Boolean> removeBatchQuestionBankQuestion(@RequestBody QuestionBankQuestionBatchRemoveRequest questionBankQuestionBatchRemoveRequest, HttpServletRequest request) {
+        ThrowUtils.throwIf(questionBankQuestionBatchRemoveRequest == null, ErrorCode.PARAMS_ERROR, "请求参数不能为空");
+        Long questionBankId = questionBankQuestionBatchRemoveRequest.getQuestionBankId();
+        List<Long> questionIdList = questionBankQuestionBatchRemoveRequest.getQuestionId();
         User loginUser = userService.getLoginUser(request);
         questionBankQuestionService.removeBatchQuestion(questionIdList, questionBankId, loginUser.getId());
         return ResultUtils.success(true);

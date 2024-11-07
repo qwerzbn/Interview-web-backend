@@ -1,5 +1,5 @@
 package com.zbn.Interview.model.dto.file;
-
+import java.io.Serial;
 import java.io.Serializable;
 import lombok.Data;
 

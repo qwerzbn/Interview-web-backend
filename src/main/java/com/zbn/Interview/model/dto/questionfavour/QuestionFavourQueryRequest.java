@@ -4,7 +4,7 @@ import com.zbn.Interview.common.PageRequest;
 import com.zbn.Interview.model.dto.question.QuestionQueryRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import java.io.Serial;
 import java.io.Serializable;
 
 /**

@@ -3,7 +3,7 @@ package ${packageName}.model.dto.${dataKey};
 import ${packageName}.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 

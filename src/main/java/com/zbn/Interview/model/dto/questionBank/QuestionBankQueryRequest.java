@@ -3,7 +3,7 @@ package com.zbn.Interview.model.dto.questionBank;
 import com.zbn.Interview.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import java.io.Serial;
 import java.io.Serializable;
 
 /**

@@ -2,7 +2,9 @@ package com.zbn.Interview.model.dto.questionbankquestion;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 删除题目题库关系请求
@@ -17,8 +19,8 @@ public class QuestionBankQuestionBatchRemoveRequest implements Serializable {
     /**
      * 题目 id
      */
-    private Long questionId;
+    private List<Long> questionId;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

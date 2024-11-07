@@ -2,7 +2,7 @@ package com.zbn.Interview.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 

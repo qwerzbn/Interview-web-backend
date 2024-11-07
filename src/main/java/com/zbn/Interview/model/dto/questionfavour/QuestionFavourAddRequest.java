@@ -1,7 +1,7 @@
 package com.zbn.Interview.model.dto.questionfavour;
 
 import lombok.Data;
-
+import java.io.Serial;
 import java.io.Serializable;
 
 /**

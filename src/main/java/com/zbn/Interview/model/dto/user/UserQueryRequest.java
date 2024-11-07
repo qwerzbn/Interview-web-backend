@@ -1,6 +1,8 @@
 package com.zbn.Interview.model.dto.user;
 
 import com.zbn.Interview.common.PageRequest;
+
+import java.io.Serial;import java.io.Serial;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

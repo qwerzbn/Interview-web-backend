@@ -2,6 +2,7 @@ package com.zbn.Interview.model.dto.questionBank;
 
 import lombok.Data;
 
+import java.io.Serial;import java.io.Serial;
 import java.io.Serializable;
 
 /**
