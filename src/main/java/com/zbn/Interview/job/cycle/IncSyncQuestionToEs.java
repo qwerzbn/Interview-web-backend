@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
  * @author zbn
  * @date 2024/10/23
  */
-// todo 取消注释开启任务
 @Component
 @Slf4j
 public class IncSyncQuestionToEs {

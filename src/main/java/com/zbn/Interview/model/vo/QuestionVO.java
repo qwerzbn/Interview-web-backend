@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.zbn.Interview.model.entity.Question;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
@@ -141,7 +142,7 @@ public class QuestionVO implements Serializable {
         }
         QuestionVO questionVO = new QuestionVO();
         BeanUtils.copyProperties(question, questionVO);
-        questionVO.setTagList(JSONUtil.toList(question.getTags(), String.class));
+        questionVO.setTagList(JSONUtil.toList(JSONUtil.parseArray(question.getTags()), String.class));
         return questionVO;
     }
 }

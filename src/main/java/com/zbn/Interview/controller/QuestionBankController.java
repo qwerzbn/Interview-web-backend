@@ -1,11 +1,20 @@
 package com.zbn.Interview.controller;
 
+import com.alibaba.csp.sentinel.Entry;
+import com.alibaba.csp.sentinel.EntryType;
+import com.alibaba.csp.sentinel.SphU;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jd.platform.hotkey.client.callback.JdHotKeyStore;
 import com.zbn.Interview.annotation.AuthCheck;
+import com.zbn.Interview.annotation.HotKeyCache;
 import com.zbn.Interview.common.BaseResponse;
 import com.zbn.Interview.common.DeleteRequest;
 import com.zbn.Interview.common.ErrorCode;
 import com.zbn.Interview.common.ResultUtils;
+import com.zbn.Interview.constant.HotKeyConstant;
 import com.zbn.Interview.constant.UserConstant;
 import com.zbn.Interview.exception.BusinessException;
 import com.zbn.Interview.exception.ThrowUtils;
@@ -142,7 +151,9 @@ public class QuestionBankController {
      * @return 题库视图
      */
     @PostMapping("/get/vo")
+    @HotKeyCache(value = HotKeyConstant.HOT_KEY_QUESTION_BANK, param = "questionBankQueryRequest")
     public BaseResponse<QuestionBankVO> getQuestionBankVOById(@RequestBody QuestionBankQueryRequest questionBankQueryRequest, HttpServletRequest request) {
+
         ThrowUtils.throwIf(questionBankQueryRequest == null || questionBankQueryRequest.getId() <= 0, ErrorCode.PARAMS_ERROR);
         long id = questionBankQueryRequest.getId();
         // 查询数据库
@@ -157,6 +168,9 @@ public class QuestionBankController {
             Page<QuestionVO> questionVOPage = questionService.listQuestionVOByPage(questionQueryRequest, request);
             questionBankVO.setQuestionVOPage(questionVOPage);
         }
+        String key = HotKeyConstant.HOT_KEY_QUESTION_BANK + id;
+        // 设置缓存
+        JdHotKeyStore.smartSet(key, questionBankVO);
         // 获取封装类
         return ResultUtils.success(questionBankVO);
     }
@@ -177,7 +191,6 @@ public class QuestionBankController {
                 questionBankService.getQueryWrapper(questionBankQueryRequest));
         return ResultUtils.success(questionBankPage);
     }
-
     /**
      * 分页获取题库列表（封装类）
      *
@@ -186,6 +199,9 @@ public class QuestionBankController {
      * @return 题库视图列表
      */
     @PostMapping("/list/page/vo")
+    @SentinelResource(value = "listQuestionBankVOByPage",
+            blockHandler = "handleBlockException",
+            fallback = "handleFallback")
     public BaseResponse<Page<QuestionBankVO>> listQuestionBankVOByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
                                                                        HttpServletRequest request) {
         long current = questionBankQueryRequest.getCurrent();
@@ -198,6 +214,30 @@ public class QuestionBankController {
         // 获取封装类
         return ResultUtils.success(questionBankService.getQuestionBankVOPage(questionBankPage, request));
     }
+
+    /**
+     * handleFallback 降级操作：直接返回本地数据
+     */
+    public BaseResponse<Page<QuestionBankVO>> handleFallback(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
+                                                             HttpServletRequest request, Throwable ex) {
+        // 可以返回本地数据或空数据
+        return ResultUtils.success(null);
+    }
+
+    /**
+     * handleBlockException 流控操作
+     * 限流：提示“系统压力过大，请耐心等待”
+     */
+    public BaseResponse<Page<QuestionBankVO>> handleBlockException(@RequestBody QuestionBankQueryRequest questionBankQueryRequest,
+                                                                   HttpServletRequest request, BlockException ex) {
+        if (ex instanceof DegradeException) {
+            // 降级操作
+            return handleFallback(questionBankQueryRequest, request, ex);
+        }
+        // 限流操作
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统压力过大，请耐心等待");
+    }
+
 
     /**
      * 分页获取当前登录用户创建的题库列表
