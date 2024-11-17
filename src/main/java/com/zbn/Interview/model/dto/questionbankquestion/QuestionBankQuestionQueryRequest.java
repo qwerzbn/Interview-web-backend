@@ -1,6 +1,7 @@
 package com.zbn.Interview.model.dto.questionbankquestion;
 
 import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -13,6 +14,6 @@ public class QuestionBankQuestionQueryRequest implements Serializable {
      * 题目 id
      */
     private Long questionId;
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

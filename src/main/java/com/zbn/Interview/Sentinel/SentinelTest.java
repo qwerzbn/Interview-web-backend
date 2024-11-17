@@ -25,7 +25,8 @@ public class SentinelTest {
             }
         }
     }
-    private static void initFlowRules(){
+
+    private static void initFlowRules() {
         List<FlowRule> rules = new ArrayList<>();
         FlowRule rule = new FlowRule();
         rule.setResource("HelloWorld");

@@ -48,12 +48,12 @@ public class QuestionFavourController {
      * 收藏 / 取消收藏
      *
      * @param QuestionFavourAddRequest
-     * @param request
+     * @param request http请求
      * @return resultNum 收藏变化数
      */
     @PostMapping("/")
     public BaseResponse<Integer> doQuestionFavour(@RequestBody QuestionFavourAddRequest QuestionFavourAddRequest,
-            HttpServletRequest request) {
+                                                  HttpServletRequest request) {
         if (QuestionFavourAddRequest == null || QuestionFavourAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -68,11 +68,11 @@ public class QuestionFavourController {
      * 获取我收藏的帖子列表
      *
      * @param QuestionQueryRequest
-     * @param request
+     * @param request http请求
      */
     @PostMapping("/my/list/page")
     public BaseResponse<Page<QuestionVO>> listMyFavourQuestionByPage(@RequestBody QuestionQueryRequest QuestionQueryRequest,
-            HttpServletRequest request) {
+                                                                     HttpServletRequest request) {
         if (QuestionQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -90,11 +90,11 @@ public class QuestionFavourController {
      * 获取用户收藏的帖子列表
      *
      * @param QuestionFavourQueryRequest
-     * @param request
+     * @param request http请求
      */
     @PostMapping("/list/page")
     public BaseResponse<Page<QuestionVO>> listFavourQuestionByPage(@RequestBody QuestionFavourQueryRequest QuestionFavourQueryRequest,
-            HttpServletRequest request) {
+                                                                   HttpServletRequest request) {
         if (QuestionFavourQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

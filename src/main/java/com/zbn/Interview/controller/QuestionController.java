@@ -1,20 +1,15 @@
 package com.zbn.Interview.controller;
 
-import cn.hutool.core.stream.CollectorUtil;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.csp.sentinel.Entry;
 import com.alibaba.csp.sentinel.EntryType;
 import com.alibaba.csp.sentinel.SphU;
 import com.alibaba.csp.sentinel.Tracer;
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zbn.Interview.annotation.AuthCheck;
 import com.zbn.Interview.common.BaseResponse;
 import com.zbn.Interview.common.DeleteRequest;
 import com.zbn.Interview.common.ErrorCode;
@@ -23,13 +18,9 @@ import com.zbn.Interview.constant.UserConstant;
 import com.zbn.Interview.exception.BusinessException;
 import com.zbn.Interview.exception.ThrowUtils;
 import com.zbn.Interview.model.dto.question.*;
-import com.zbn.Interview.model.dto.questionBank.QuestionBankQueryRequest;
 import com.zbn.Interview.model.entity.Question;
-import com.zbn.Interview.model.entity.QuestionBankQuestion;
 import com.zbn.Interview.model.entity.User;
-import com.zbn.Interview.model.vo.QuestionBankVO;
 import com.zbn.Interview.model.vo.QuestionVO;
-import com.zbn.Interview.service.QuestionBankQuestionService;
 import com.zbn.Interview.service.QuestionService;
 import com.zbn.Interview.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Wrapper;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 题目接口
@@ -66,11 +54,11 @@ public class QuestionController {
      * 创建题目
      *
      * @param questionAddRequest
-     * @param request
+     * @param request http请求
      * @return
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionAddRequest == null, ErrorCode.PARAMS_ERROR);
         // 将DTO类转换成实体类
@@ -101,11 +89,11 @@ public class QuestionController {
      * 删除题目
      *
      * @param deleteRequest
-     * @param request
+     * @param request http请求
      * @return
      */
     @PostMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
 
     public BaseResponse<Boolean> deleteQuestion(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
@@ -133,7 +121,7 @@ public class QuestionController {
      * @return
      */
     @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateQuestion(@RequestBody QuestionUpdateRequest questionUpdateRequest) {
         if (questionUpdateRequest == null || questionUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -181,7 +169,7 @@ public class QuestionController {
      * @return
      */
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest) {
         ThrowUtils.throwIf(questionQueryRequest == null, ErrorCode.PARAMS_ERROR);
         Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
@@ -192,7 +180,7 @@ public class QuestionController {
      * 分页获取题目列表（封装类）
      *
      * @param questionQueryRequest
-     * @param request
+     * @param request http请求
      * @return
      */
     @PostMapping("/list/page/vo/sentinel")
@@ -244,7 +232,7 @@ public class QuestionController {
      * 分页获取题目列表（封装类）
      *
      * @param questionQueryRequest
-     * @param request
+     * @param request http请求
      * @return
      */
     @PostMapping("/list/page/vo")
@@ -263,11 +251,11 @@ public class QuestionController {
      * 分页获取当前登录用户创建的题目列表
      *
      * @param questionQueryRequest
-     * @param request
+     * @param request http请求
      * @return
      */
     @PostMapping("/my/list/page/vo")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<QuestionVO>> listMyQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                                  HttpServletRequest request) {
         ThrowUtils.throwIf(questionQueryRequest == null, ErrorCode.PARAMS_ERROR);
@@ -289,11 +277,11 @@ public class QuestionController {
      * 编辑题目（给用户使用）
      *
      * @param questionEditRequest
-     * @param request
+     * @param request http请求
      * @return
      */
     @PostMapping("/edit")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> editQuestion(@RequestBody QuestionEditRequest questionEditRequest, HttpServletRequest request) {
         if (questionEditRequest == null || questionEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -327,7 +315,7 @@ public class QuestionController {
      * ES 查询
      *
      * @param questionQueryRequest
-     * @param request
+     * @param request http请求
      * @return
      */
     @PostMapping("/search/page/vo")
@@ -347,7 +335,7 @@ public class QuestionController {
      * @return 删除结果
      */
     @DeleteMapping("/batch/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     @Transactional(rollbackFor = Exception.class)
     public BaseResponse<Boolean> batchDeleteQuestion(@RequestBody QuestionBatchDeleteRequest questionBatchDeleteRequest) {
         ThrowUtils.throwIf(questionBatchDeleteRequest == null, ErrorCode.PARAMS_ERROR);

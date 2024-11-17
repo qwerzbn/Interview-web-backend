@@ -1,6 +1,7 @@
 package com.zbn.Interview.model.dto.questionfavour;
 
 import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -18,6 +19,6 @@ public class QuestionFavourAddRequest implements Serializable {
      */
     private Long questionId;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

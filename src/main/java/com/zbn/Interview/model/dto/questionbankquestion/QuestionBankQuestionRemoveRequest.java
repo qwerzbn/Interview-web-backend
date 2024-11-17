@@ -1,6 +1,7 @@
 package com.zbn.Interview.model.dto.questionbankquestion;
 
 import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -19,6 +20,6 @@ public class QuestionBankQuestionRemoveRequest implements Serializable {
      */
     private Long questionId;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

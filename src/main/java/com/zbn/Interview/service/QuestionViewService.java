@@ -16,7 +16,7 @@ public interface QuestionViewService extends IService<QuestionView> {
      * 浏览题目
      *
      * @param questionId 题目id
-     * @param loginUser 登录用户
+     * @param loginUser  登录用户
      * @return
      */
     int doQuestionView(long questionId, User loginUser);
@@ -25,7 +25,7 @@ public interface QuestionViewService extends IService<QuestionView> {
      * 浏览题目(内部服务)
      *
      * @param questionId 题目id
-     * @param userId 用户id
+     * @param userId     用户id
      * @return
      */
     int doQuestionInnerView(long questionId, long userId);

@@ -4,15 +4,17 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 题目浏览表
+ *
  * @TableName question_view
  */
-@TableName(value ="question_view")
+@TableName(value = "question_view")
 public class QuestionView implements Serializable {
     /**
      * id
@@ -41,7 +43,7 @@ public class QuestionView implements Serializable {
     private Date updateTime;
 
     @TableField(exist = false)
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

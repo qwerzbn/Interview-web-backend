@@ -38,7 +38,7 @@ public class QuestionThumbController {
      * 点赞 / 取消点赞
      *
      * @param QuestionThumbAddRequest
-     * @param request
+     * @param request http请求
      * @return resultNum 本次点赞变化数
      */
     @PostMapping("/")

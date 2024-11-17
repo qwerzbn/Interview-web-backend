@@ -1,7 +1,7 @@
 package com.zbn.Interview.utils;
 
-import java.net.InetAddress;
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
 
 /**
  * 网络工具类
@@ -14,7 +14,7 @@ public class NetUtils {
     /**
      * 获取客户端 IP 地址
      *
-     * @param request
+     * @param request http请求
      * @return
      */
     public static String getIpAddress(HttpServletRequest request) {

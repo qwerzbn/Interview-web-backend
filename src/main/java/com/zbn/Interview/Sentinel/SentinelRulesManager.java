@@ -1,4 +1,5 @@
 package com.zbn.Interview.Sentinel;
+
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.csp.sentinel.datasource.*;
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRule;
@@ -60,6 +61,7 @@ public class SentinelRulesManager {
         // 加载规则
         DegradeRuleManager.loadRules(Arrays.asList(slowCallRule, errorRateRule));
     }
+
     /**
      * 持久化配置为本地文件
      */

@@ -1,6 +1,7 @@
 package com.zbn.Interview.model.dto.question;
 
 import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -45,6 +46,6 @@ public class QuestionAddRequest implements Serializable {
      * 优先级
      */
     private Integer priority;
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

@@ -21,6 +21,7 @@ public interface QuestionThumbService extends IService<QuestionThumb> {
      * @return
      */
     int doQuestionThumb(long questionId, User loginUser);
+
     /**
      * 题目点赞(内部服务)
      *

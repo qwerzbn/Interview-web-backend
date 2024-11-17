@@ -9,5 +9,5 @@ package com.zbn.Interview.constant;
 public interface HotKeyConstant {
 
     String HOT_KEY_QUESTION_BANK = "bank_detail_";
-    
+
 }

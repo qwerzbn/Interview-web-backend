@@ -1,8 +1,10 @@
 package com.zbn.Interview.model.vo;
+
+import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 已登录用户视图（脱敏）
@@ -48,6 +50,6 @@ public class LoginUserVO implements Serializable {
      */
     private Date updateTime;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

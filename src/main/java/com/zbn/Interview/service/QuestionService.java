@@ -8,7 +8,6 @@ import com.zbn.Interview.model.entity.Question;
 import com.zbn.Interview.model.vo.QuestionVO;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * 题目服务
@@ -38,8 +37,8 @@ public interface QuestionService extends IService<Question> {
      * 获取题目封装
      *
      * @param question 题目
-     * @param request 请求
-     * @return  题目封装
+     * @param request http请求  请求
+     * @return 题目封装
      */
     QuestionVO getQuestionVO(Question question, HttpServletRequest request);
 
@@ -47,8 +46,8 @@ public interface QuestionService extends IService<Question> {
      * 分页获取题目封装
      *
      * @param questionPage 题目分页
-     * @param request 请求
-     * @return  题目封装分页
+     * @param request http请求      请求
+     * @return 题目封装分页
      */
     Page<QuestionVO> getQuestionVOPage(Page<Question> questionPage, HttpServletRequest request);
 
@@ -56,7 +55,7 @@ public interface QuestionService extends IService<Question> {
      * 分页获取题目
      *
      * @param questionQueryRequest 题目查询请求
-     * @param request 请求
+     * @param request http请求              请求
      * @return 题目分页
      */
     Page<QuestionVO> listQuestionVOByPage(QuestionQueryRequest questionQueryRequest, HttpServletRequest request);

@@ -1,11 +1,11 @@
 package com.zbn.Interview.model.dto.user;
 
 import com.zbn.Interview.common.PageRequest;
-
-import java.io.Serial;import java.io.Serial;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 用户查询请求
@@ -46,6 +46,6 @@ public class UserQueryRequest extends PageRequest implements Serializable {
      */
     private String userRole;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

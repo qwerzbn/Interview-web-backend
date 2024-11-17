@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zbn.Interview.model.entity.Post;
 import com.zbn.Interview.model.entity.Question;
 import com.zbn.Interview.model.entity.QuestionFavour;
 import org.apache.ibatis.annotations.Param;

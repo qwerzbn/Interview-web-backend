@@ -2,7 +2,6 @@ package com.zbn.Interview.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import com.zbn.Interview.common.ErrorCode;
 import com.zbn.Interview.exception.BusinessException;
 import com.zbn.Interview.mapper.QuestionThumbMapper;

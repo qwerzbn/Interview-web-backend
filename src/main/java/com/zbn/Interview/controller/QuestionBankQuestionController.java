@@ -1,10 +1,10 @@
 package com.zbn.Interview.controller;
 
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.zbn.Interview.annotation.AuthCheck;
 import com.zbn.Interview.common.BaseResponse;
 import com.zbn.Interview.common.DeleteRequest;
 import com.zbn.Interview.common.ErrorCode;
@@ -56,7 +56,7 @@ public class QuestionBankQuestionController {
      * 添加题目到题库
      *
      * @param questionBankQuestionAddRequest 添加请求
-     * @param request                        http请求
+     * @param request http请求                        http请求
      * @return id
      */
     @PostMapping("/add")
@@ -90,11 +90,11 @@ public class QuestionBankQuestionController {
      * 删除题目题库信息
      *
      * @param deleteRequest 删除请求
-     * @param request       http请求
+     * @param request http请求       http请求
      * @return 是否成功
      */
     @DeleteMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteQuestionBankQuestion(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         // 判断请求是否合法
         ThrowUtils.throwIf(deleteRequest == null, ErrorCode.PARAMS_ERROR);
@@ -126,7 +126,7 @@ public class QuestionBankQuestionController {
      * @return 是否成功
      */
     @DeleteMapping("/remove")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> removeQuestionBankQuestion(@RequestBody QuestionBankQuestionRemoveRequest questionBankQuestionRemoveRequest) {
         ThrowUtils.throwIf(questionBankQuestionRemoveRequest == null, ErrorCode.PARAMS_ERROR);
         Long questionBankId = questionBankQuestionRemoveRequest.getQuestionBankId();
@@ -147,7 +147,7 @@ public class QuestionBankQuestionController {
      * @return 所属题库列表
      */
     @PostMapping("/list/questionBank")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<List<QuestionBank>> listQuestionBankByQuestion(@RequestBody QuestionBankQuestionQueryRequest questionBankQuestionQueryRequest) {
         ThrowUtils.throwIf(questionBankQuestionQueryRequest == null, ErrorCode.PARAMS_ERROR);
         Long questionId = questionBankQuestionQueryRequest.getQuestionId();
@@ -168,11 +168,11 @@ public class QuestionBankQuestionController {
      * 批量添加题目
      *
      * @param questionBankQuestionBatchAddRequest 批量添加请求
-     * @param request                             http请求
+     * @param request http请求                             http请求
      * @return 是否成功
      */
     @PostMapping("/add/batch")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> addBatchQuestionBankQuestion(@RequestBody QuestionBankQuestionBatchAddRequest questionBankQuestionBatchAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionBankQuestionBatchAddRequest == null, ErrorCode.PARAMS_ERROR, "请求参数不能为空");
         Long questionBankId = questionBankQuestionBatchAddRequest.getQuestionBankId();
@@ -186,11 +186,11 @@ public class QuestionBankQuestionController {
      * 批量移除题目
      *
      * @param questionBankQuestionBatchRemoveRequest 批量添加请求
-     * @param request                             http请求
+     * @param request http请求                                http请求
      * @return 是否成功
      */
     @DeleteMapping("/remove/batch")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> removeBatchQuestionBankQuestion(@RequestBody QuestionBankQuestionBatchRemoveRequest questionBankQuestionBatchRemoveRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionBankQuestionBatchRemoveRequest == null, ErrorCode.PARAMS_ERROR, "请求参数不能为空");
         Long questionBankId = questionBankQuestionBatchRemoveRequest.getQuestionBankId();

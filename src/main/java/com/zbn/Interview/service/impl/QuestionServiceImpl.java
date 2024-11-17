@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import com.zbn.Interview.common.ErrorCode;
-
-
 import com.zbn.Interview.constant.CommonConstant;
 import com.zbn.Interview.exception.ThrowUtils;
 import com.zbn.Interview.mapper.QuestionFavourMapper;
@@ -42,7 +39,6 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
-
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -159,7 +155,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
      * 获取题目封装
      *
      * @param question
-     * @param request
+     * @param request http请求
      * @return
      */
     @Override
@@ -209,7 +205,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
      * 分页获取题目封装
      *
      * @param questionPage
-     * @param request
+     * @param request http请求
      * @return
      */
     @Override

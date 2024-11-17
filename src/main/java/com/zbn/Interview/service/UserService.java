@@ -6,11 +6,10 @@ import com.zbn.Interview.model.dto.user.UserQueryRequest;
 import com.zbn.Interview.model.entity.User;
 import com.zbn.Interview.model.vo.LoginUserVO;
 import com.zbn.Interview.model.vo.UserVO;
-
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户服务
@@ -35,7 +34,7 @@ public interface UserService extends IService<User> {
      *
      * @param userAccount  用户账户
      * @param userPassword 用户密码
-     * @param request      http请求
+     * @param request http请求      http请求
      * @return 脱敏后的用户信息
      */
     LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request);
@@ -44,7 +43,7 @@ public interface UserService extends IService<User> {
      * 用户登录（微信开放平台）
      *
      * @param wxOAuth2UserInfo 从微信获取的用户信息
-     * @param request          http请求
+     * @param request http请求          http请求
      * @return 脱敏后的用户信息
      */
     LoginUserVO userLoginByMpOpen(WxOAuth2UserInfo wxOAuth2UserInfo, HttpServletRequest request);
@@ -52,7 +51,7 @@ public interface UserService extends IService<User> {
     /**
      * 获取当前登录用户
      *
-     * @param request http请求
+     * @param request http请求 http请求
      * @return 当前登录用户
      */
     User getLoginUser(HttpServletRequest request);
@@ -60,7 +59,7 @@ public interface UserService extends IService<User> {
     /**
      * 获取当前登录用户（允许未登录）
      *
-     * @param request http请求
+     * @param request http请求 http请求
      * @return 当前登录用户
      */
     User getLoginUserPermitNull(HttpServletRequest request);
@@ -68,7 +67,7 @@ public interface UserService extends IService<User> {
     /**
      * 是否为管理员
      *
-     * @param request http请求
+     * @param request http请求 http请求
      * @return 是否为管理员
      */
     boolean isAdmin(HttpServletRequest request);
@@ -84,7 +83,7 @@ public interface UserService extends IService<User> {
     /**
      * 用户注销
      *
-     * @param request http请求
+     * @param request http请求 http请求
      * @return 用户是否注销成功
      */
     boolean userLogout(HttpServletRequest request);

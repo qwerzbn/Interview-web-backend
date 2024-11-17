@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author zbn
  * @date 2024/10/23
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class AuthInterceptor {
 
     @Resource

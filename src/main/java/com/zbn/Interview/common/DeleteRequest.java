@@ -1,7 +1,9 @@
 package com.zbn.Interview.common;
+
+import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
-import lombok.Data;
 
 /**
  * 删除请求
@@ -17,6 +19,6 @@ public class DeleteRequest implements Serializable {
      */
     private Long id;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

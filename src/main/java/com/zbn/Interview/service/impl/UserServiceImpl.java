@@ -1,7 +1,6 @@
 package com.zbn.Interview.service.impl;
 
-import static com.zbn.Interview.constant.UserConstant.USER_LOGIN_STATE;
-
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,25 +14,30 @@ import com.zbn.Interview.model.entity.User;
 import com.zbn.Interview.model.enums.UserRoleEnum;
 import com.zbn.Interview.model.vo.LoginUserVO;
 import com.zbn.Interview.model.vo.UserVO;
+import com.zbn.Interview.saToken.DeviceUtils;
 import com.zbn.Interview.service.UserService;
 import com.zbn.Interview.utils.SqlUtils;
-
-import java.time.LocalDate;
-import java.time.Year;
-import java.util.*;
-import java.util.stream.Collectors;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RBitSet;
+import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.zbn.Interview.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * 用户服务实现
@@ -50,7 +54,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 盐值，混淆密码
      */
     public static final String SALT = "zbn";
-
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
         // 1. 校验
@@ -114,7 +117,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
         // 3. 记录用户的登录态
-        request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        // 使用session记录
+        // request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        // 记录用户的设备信息
+        String deviceType = DeviceUtils.getRequestDevice(request);
+        String userId = String.valueOf(user.getId());
+        // 使用saToken登录
+
+        StpUtil.login(userId, deviceType);
+        StpUtil.getSessionByLoginId(user.getId()).set(USER_LOGIN_STATE, user);
+
+        // 使用redis记录
+//        RMap<String, String> userDevices = redissonClient.getMap("user:" + userId);
+//        String conflictKey = "conflict:" + userId;
+//
+//        // 检测是否有相同设备类型的登录
+//        for (Map.Entry<String, String> entry : userDevices.entrySet()) {
+//            if (entry.getValue().equals(deviceType)) {
+//                // 记录冲突
+//                redissonClient.getMap(conflictKey).put("deviceType", deviceType);
+//                redissonClient.getMap(conflictKey).put("deviceNumber", entry.getKey());
+//                System.out.println("冲突检测: 用户 " + userId + " 在相同设备 " + deviceType + " 上登录冲突");
+//            }
+//        }
+//        // 登录成功，记录新设备
+//        String deviceNumber = String.valueOf(userDevices.size() + 1);
+//        userDevices.put(deviceNumber, deviceType);
+//        System.out.println("用户 " + userId + " 成功登录设备: " + deviceType + ", 设备编号: " + deviceNumber);
+
         return this.getLoginUserVO(user);
     }
 
@@ -153,20 +183,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 获取当前登录用户
      *
-     * @param request
-     * @return
+     * @param request http请求 http请求
+     * @return 用户信息
      */
     @Override
     public User getLoginUser(HttpServletRequest request) {
         // 先判断是否已登录
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
-        User currentUser = (User) userObj;
-        if (currentUser == null || currentUser.getId() == null) {
+        Object loginUserId = StpUtil.getLoginIdDefaultNull();
+        if (loginUserId == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
-        // 从数据库查询（追求性能的话可以注释，直接走缓存）
-        long userId = currentUser.getId();
-        currentUser = this.getById(userId);
+        User currentUser = this.getById((Serializable) loginUserId);
         if (currentUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
@@ -176,13 +203,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 获取当前登录用户（允许未登录）
      *
-     * @param request
-     * @return
+     * @param request http请求
+     * @return 用户信息
      */
     @Override
     public User getLoginUserPermitNull(HttpServletRequest request) {
         // 先判断是否已登录
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        Object userObj = StpUtil.getSession().get(USER_LOGIN_STATE);
         User currentUser = (User) userObj;
         if (currentUser == null || currentUser.getId() == null) {
             return null;
@@ -195,17 +222,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 是否为管理员
      *
-     * @param request
-     * @return
+     * @param request http请求
+     * @return 是否为管理员
      */
     @Override
     public boolean isAdmin(HttpServletRequest request) {
         // 仅管理员可查询
-        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        Object userObj = StpUtil.getSession().get(USER_LOGIN_STATE);
         User user = (User) userObj;
         return isAdmin(user);
     }
 
+    /**
+     * 是否为管理员
+     *
+     * @param user 用户
+     * @return 是否为管理员
+     */
     @Override
     public boolean isAdmin(User user) {
         return user != null && UserRoleEnum.ADMIN.getValue().equals(user.getUserRole());
@@ -214,15 +247,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 用户注销
      *
-     * @param request
+     * @param request http请求
      */
     @Override
     public boolean userLogout(HttpServletRequest request) {
-        if (request.getSession().getAttribute(USER_LOGIN_STATE) == null) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR, "未登录");
-        }
-        // 移除登录态
-        request.getSession().removeAttribute(USER_LOGIN_STATE);
+        StpUtil.checkLogin();
+        StpUtil.logout();
         return true;
     }
 
@@ -315,7 +345,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String key = RedisConstant.getUserSignInRedisKey(year, userId);
         //获取Redis的BitMap
         RBitSet bitSet = redissonClient.getBitSet(key);
-        // 加载 bitmap 到内存中 ，避免后续发送多次请求
+        // 加载 bitmap 到内存中避免后续发送多次请求
         BitSet singInBitSet = bitSet.asBitSet();
         int index = singInBitSet.nextSetBit(0);
         while (index != -1) {

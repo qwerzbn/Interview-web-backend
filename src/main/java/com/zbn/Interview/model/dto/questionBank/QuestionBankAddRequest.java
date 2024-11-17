@@ -2,7 +2,7 @@ package com.zbn.Interview.model.dto.questionBank;
 
 import lombok.Data;
 
-import java.io.Serial;import java.io.Serial;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -33,6 +33,6 @@ public class QuestionBankAddRequest implements Serializable {
      */
     private Integer priority;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

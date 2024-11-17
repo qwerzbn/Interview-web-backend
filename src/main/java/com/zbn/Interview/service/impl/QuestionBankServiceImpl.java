@@ -23,7 +23,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +45,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
      * 校验数据
      *
      * @param questionBank
-     * @param add      对创建的数据进行校验
+     * @param add          对创建的数据进行校验
      */
     @Override
     public void validQuestionBank(QuestionBank questionBank, boolean add) {
@@ -113,7 +115,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
      * 获取题库封装
      *
      * @param questionBank
-     * @param request
+     * @param request http请求
      * @return
      */
     @Override
@@ -139,7 +141,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
      * 分页获取题库封装
      *
      * @param questionBankPage
-     * @param request
+     * @param request http请求
      * @return
      */
     @Override

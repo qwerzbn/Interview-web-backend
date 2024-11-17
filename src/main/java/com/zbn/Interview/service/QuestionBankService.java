@@ -21,7 +21,7 @@ public interface QuestionBankService extends IService<QuestionBank> {
      * 校验数据
      *
      * @param questionBank
-     * @param add 对创建的数据进行校验
+     * @param add          对创建的数据进行校验
      */
     void validQuestionBank(QuestionBank questionBank, boolean add);
 
@@ -32,12 +32,12 @@ public interface QuestionBankService extends IService<QuestionBank> {
      * @return
      */
     QueryWrapper<QuestionBank> getQueryWrapper(QuestionBankQueryRequest questionBankQueryRequest);
-    
+
     /**
      * 获取题库封装
      *
      * @param questionBank
-     * @param request
+     * @param request http请求
      * @return
      */
     QuestionBankVO getQuestionBankVO(QuestionBank questionBank, HttpServletRequest request);
@@ -46,7 +46,7 @@ public interface QuestionBankService extends IService<QuestionBank> {
      * 分页获取题库封装
      *
      * @param questionBankPage
-     * @param request
+     * @param request http请求
      * @return
      */
     Page<QuestionBankVO> getQuestionBankVOPage(Page<QuestionBank> questionBankPage, HttpServletRequest request);

@@ -3,6 +3,7 @@ package com.zbn.Interview.model.dto.questionBank;
 import com.zbn.Interview.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -52,6 +53,6 @@ public class QuestionBankQueryRequest extends PageRequest implements Serializabl
      */
     private Long reviewerId;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

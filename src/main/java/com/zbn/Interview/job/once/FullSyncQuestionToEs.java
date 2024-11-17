@@ -7,7 +7,6 @@ import com.zbn.Interview.model.entity.Question;
 import com.zbn.Interview.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;

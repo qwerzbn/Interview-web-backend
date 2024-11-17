@@ -1,7 +1,9 @@
 package com.zbn.Interview.model.dto.user;
+
+import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
-import lombok.Data;
 
 /**
  * 用户更新请求
@@ -36,6 +38,6 @@ public class UserUpdateRequest implements Serializable {
      */
     private String userRole;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

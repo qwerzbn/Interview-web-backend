@@ -5,9 +5,7 @@ import com.zbn.Interview.annotation.HotKeyCache;
 import com.zbn.Interview.common.ErrorCode;
 import com.zbn.Interview.common.ResultUtils;
 import com.zbn.Interview.exception.BusinessException;
-import com.zbn.Interview.model.dto.question.QuestionQueryRequest;
 import com.zbn.Interview.model.dto.questionBank.QuestionBankQueryRequest;
-import com.zbn.Interview.model.entity.QuestionBank;
 import com.zbn.Interview.model.vo.QuestionBankVO;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -27,7 +25,7 @@ public class HotKeyCacheAspect {
         String key = hotKeyCache.value();
         if (param == null || param.isEmpty()) {
 
-        }else {
+        } else {
             Object paramValue = getParamValue(joinPoint, param);
             QuestionBankQueryRequest questionBankQueryRequest = (QuestionBankQueryRequest) paramValue;
             if (questionBankQueryRequest == null) {

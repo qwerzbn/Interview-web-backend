@@ -1,14 +1,11 @@
 package com.zbn.Interview.controller;
 
-import com.alibaba.csp.sentinel.Entry;
-import com.alibaba.csp.sentinel.EntryType;
-import com.alibaba.csp.sentinel.SphU;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jd.platform.hotkey.client.callback.JdHotKeyStore;
-import com.zbn.Interview.annotation.AuthCheck;
 import com.zbn.Interview.annotation.HotKeyCache;
 import com.zbn.Interview.common.BaseResponse;
 import com.zbn.Interview.common.DeleteRequest;
@@ -66,11 +63,11 @@ public class QuestionBankController {
      * 创建题库
      *
      * @param questionBankAddRequest 添加请求
-     * @param request                http请求
+     * @param request http请求                http请求
      * @return id
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addQuestionBank(@RequestBody QuestionBankAddRequest questionBankAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionBankAddRequest == null, ErrorCode.PARAMS_ERROR);
         // todo 在此处将实体类和 DTO 进行转换
@@ -93,11 +90,11 @@ public class QuestionBankController {
      * 删除题库
      *
      * @param deleteRequest 删除请求
-     * @param request       http请求
+     * @param request http请求       http请求
      * @return 是否成功
      */
     @PostMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteQuestionBank(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -124,7 +121,7 @@ public class QuestionBankController {
      * @return 是否成功
      */
     @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateQuestionBank(@RequestBody QuestionBankUpdateRequest questionBankUpdateRequest) {
         if (questionBankUpdateRequest == null || questionBankUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -182,7 +179,7 @@ public class QuestionBankController {
      * @return 题库列表
      */
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<QuestionBank>> listQuestionBankByPage(@RequestBody QuestionBankQueryRequest questionBankQueryRequest) {
         long current = questionBankQueryRequest.getCurrent();
         long size = questionBankQueryRequest.getPageSize();
@@ -191,11 +188,12 @@ public class QuestionBankController {
                 questionBankService.getQueryWrapper(questionBankQueryRequest));
         return ResultUtils.success(questionBankPage);
     }
+
     /**
      * 分页获取题库列表（封装类）
      *
      * @param questionBankQueryRequest 查询请求
-     * @param request                  http请求
+     * @param request http请求                  http请求
      * @return 题库视图列表
      */
     @PostMapping("/list/page/vo")
@@ -243,7 +241,7 @@ public class QuestionBankController {
      * 分页获取当前登录用户创建的题库列表
      *
      * @param questionBankQueryRequest 查询请求
-     * @param request                  http请求
+     * @param request http请求                  http请求
      * @return 题库视图列表
      */
     @PostMapping("/my/list/page/vo")
@@ -268,11 +266,11 @@ public class QuestionBankController {
      * 编辑题库
      *
      * @param questionBankEditRequest 编辑请求
-     * @param request                 http请求
+     * @param request http请求                 http请求
      * @return 是否成功
      */
     @PostMapping("/edit")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> editQuestionBank(@RequestBody QuestionBankEditRequest questionBankEditRequest, HttpServletRequest request) {
         if (questionBankEditRequest == null || questionBankEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);

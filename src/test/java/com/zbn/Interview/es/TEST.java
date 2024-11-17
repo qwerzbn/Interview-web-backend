@@ -15,6 +15,7 @@ public class TEST {
         result = baseprise / 100.0 * (100 - discount - calculate_special(ID));
         return result;
     }
+
     public static double calculate_special(String ID) {
         if (ID.equals("SVIP")) {
             return 20;
@@ -23,6 +24,7 @@ public class TEST {
         }
         return 0;
     }
+
     public static void main(String[] args) {
         // 测试不同的输入
         System.out.println("价格计算结果：");

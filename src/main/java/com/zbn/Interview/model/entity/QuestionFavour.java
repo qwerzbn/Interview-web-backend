@@ -5,15 +5,17 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 题目收藏表
+ *
  * @TableName question_favour
  */
-@TableName(value ="question_favour")
+@TableName(value = "question_favour")
 @Data
 public class QuestionFavour implements Serializable {
     /**
@@ -43,6 +45,6 @@ public class QuestionFavour implements Serializable {
     private Date updateTime;
 
     @TableField(exist = false)
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

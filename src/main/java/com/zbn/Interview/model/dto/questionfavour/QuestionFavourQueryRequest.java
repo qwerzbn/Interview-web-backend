@@ -4,6 +4,7 @@ import com.zbn.Interview.common.PageRequest;
 import com.zbn.Interview.model.dto.question.QuestionQueryRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -27,6 +28,6 @@ public class QuestionFavourQueryRequest extends PageRequest implements Serializa
      */
     private Long userId;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

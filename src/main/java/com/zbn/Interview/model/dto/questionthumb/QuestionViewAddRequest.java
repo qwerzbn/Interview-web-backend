@@ -1,6 +1,7 @@
 package com.zbn.Interview.model.dto.questionthumb;
 
 import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -18,6 +19,6 @@ public class QuestionViewAddRequest implements Serializable {
      */
     private Long questionId;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }

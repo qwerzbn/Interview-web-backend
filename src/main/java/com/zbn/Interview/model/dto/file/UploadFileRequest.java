@@ -1,7 +1,9 @@
 package com.zbn.Interview.model.dto.file;
+
+import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
-import lombok.Data;
 
 /**
  * 文件上传请求
@@ -17,6 +19,6 @@ public class UploadFileRequest implements Serializable {
      */
     private String biz;
 
-       @Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 }
